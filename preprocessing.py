@@ -6,7 +6,7 @@ def removeHoles(contours, thresh):
 		cv.drawContours(thresh, [cnt], 0, 255, -1)
 	return (contours, thresh)
 
-def removeNoiseDots(thresh):
+def removeNoiseDots(img, thresh):
 	se1 = cv.getStructuringElement(cv.MORPH_RECT, (5,5))
 	se2 = cv.getStructuringElement(cv.MORPH_RECT, (2,2))
 	mask = cv.morphologyEx(thresh, cv.MORPH_CLOSE, se1)
@@ -14,5 +14,11 @@ def removeNoiseDots(thresh):
 
 	mask = np.dstack([mask, mask, mask]) / 255
 	out = img * mask
+	# Make it only black and white, not gray
+	out = out.astype(np.uint8)
+	outgray = cv.cvtColor(out, cv.COLOR_BGR2GRAY)
+	for i in range(0, len(outgray)-1):
+		for j in range(0, len(outgray[i])-1):
+			if outgray[i][j] != 0: outgray[i][j] = 255
 
-	return out
+	return outgray

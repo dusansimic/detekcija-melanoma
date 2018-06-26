@@ -1,4 +1,5 @@
 import cv2 as cv
+import numpy as np
 
 def findDefects(contours, drawDefects, img):
 	cnt = contours[0]
@@ -22,3 +23,12 @@ def compareContours(contour1, contour2):
 def getFittedEllipse(contour):
 	ellipse = cv.fitEllipse(contour)
 	return ellipse
+
+def getEquivalentCircle(contour):
+	area = cv.contourArea(contour)
+	radius = np.sqrt(area/np.pi)
+	M = cv.moments(contour)
+	x = int(M['m10'] / M['m00'])
+	y = int(M['m01'] / M['m00'])
+
+	return (x, y, radius)

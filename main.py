@@ -4,7 +4,7 @@ import preprocessing as prep
 import border as border
 import util as util
 
-img = cv.imread('images/melanoma.jpg') # Reading image
+img = cv.imread('images/cut3.jpg') # Reading image
 imggray = cv.cvtColor(img, cv.COLOR_BGR2GRAY) # Converting to BW
 _, thresh = cv.threshold(imggray, 127, 255, cv.THRESH_BINARY_INV) # Getting threshold
 img2, contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) # Getting contour
@@ -33,16 +33,21 @@ blankImage = np.zeros((blankImageHeight, blankImageWidth, 3), np.uint8)
 
 # Draw ellipse on blank and original image
 contourNew = util.findLargestContour(contours)
-ellipse = border.getFittedEllipse(contourNew)
-cv.ellipse(img, ellipse, (0, 255, 0), 2)
-cv.ellipse(blankImage, ellipse, (255, 255, 255), 2)
+# ellipse = border.getFittedEllipse(contourNew)
+x, y, radius = border.getEquivalentCircle(contourNew)
+cv.circle(img, (x, y), int(radius), (0, 255, 0), 2)
+# cv.ellipse(img, ellipse, (0, 255, 0), 2)
+cv.circle(blankImage, (x, y), int(radius), (255, 255, 255), 2)
+# cv.ellipse(blankImage, ellipse, (255, 255, 255), 2)
 blankImageBW = cv.cvtColor(blankImage, cv.COLOR_BGR2GRAY)
 imgBlankImage, contourBlankImage, _ = cv.findContours(blankImageBW, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 contourBlankImage, imgBlankImage = prep.removeHoles(contourBlankImage, imgBlankImage)
 imgFinal, contourFinal, _ = cv.findContours(out, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-print(border.compareContours(util.findLargestContour(contourFinal), contourBlankImage[0]))
+precent = border.compareContours(util.findLargestContour(contourFinal), contourBlankImage[0])
+precent *= 100
+print(precent, '%')
 
-# cv.imshow('Image', out) # Show result
-# cv.imshow('Blank image', imgBlankImage)
+cv.imshow('Image', out) # Show result
+cv.imshow('Blank image', imgBlankImage)
 cv.waitKey()
 cv.destroyAllWindows()

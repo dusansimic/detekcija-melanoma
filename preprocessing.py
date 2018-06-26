@@ -6,6 +6,11 @@ def removeHoles(contours, thresh):
 		cv.drawContours(thresh, [cnt], 0, 255, -1)
 	return (contours, thresh)
 
+def colorInBlack(contours, thresh):
+	for cnt in contours:
+		cv.drawContours(thresh, [cnt], 0, 0, -1)
+	return (contours, thresh)
+
 def removeNoiseDots(img, thresh):
 	se1 = cv.getStructuringElement(cv.MORPH_RECT, (5,5))
 	se2 = cv.getStructuringElement(cv.MORPH_RECT, (2,2))

@@ -5,7 +5,7 @@ import preprocessing as prep
 import border as border
 import diameter as diameter
 import color as color
-import util as util
+import asymmetry as asymmetry
 import sys
 
 proportions = 0
@@ -67,11 +67,18 @@ print(diameter * proportions)
 # =============
 # Prepare melanoma contour
 stddevs, tempImg = color.getColorDeviation(img, out)
-
 print(stddevs)
 
-cv.namedWindow('Image', cv.WINDOW_NORMAL)
-cv.imshow('Image', tempImg) # Show result
-cv.resizeWindow('Image', 600,	600)
-cv.waitKey()
-cv.destroyAllWindows()
+# =============
+# A Rule
+#
+# Asymmetry rule
+# =============
+deviation = asymmetry.getXOR(out)
+print(deviation)
+
+# cv.namedWindow('Image', cv.WINDOW_NORMAL)
+# cv.imshow('Image', tempImg) # Show result
+# cv.resizeWindow('Image', 600,	600)
+# cv.waitKey()
+# cv.destroyAllWindows()

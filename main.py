@@ -66,41 +66,9 @@ print(diameter * proportions)
 # Color detecion
 # =============
 # Prepare melanoma contour
-imgFinal, contourFinal, _ = cv.findContours(out, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-contourFinal, imgFinal = prep.removeHoles(contourFinal, imgFinal)
-largestFinalContour = util.findLargestContour(contourFinal)
-maskHeight, maskWidth = out.shape
-mask = np.zeros((maskHeight, maskWidth, 3), np.uint8)
-mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
-mask = cv.drawContours(mask, [largestFinalContour], -1, (255), 1)
-mask = np.dstack((mask, mask, mask))
-cv.fillPoly(mask, pts = [largestFinalContour], color = (1, 1, 1)) # Fill with circle
-tempImg = img * mask
-tempImgArr = tempImg[np.nonzero(tempImg)]
-tempImgArr = tempImgArr[:int(len(tempImgArr)/3)*3]
-# means, stddevs = color.getColorDeviation(tempImg)
-colorArrR = []
-colorArrG = []
-colorArrB = []
-for i in np.arange(0, len(tempImgArr), 3):
-	colorArrB.append(tempImgArr[i])
-	colorArrG.append(tempImgArr[i + 1])
-	colorArrR.append(tempImgArr[i + 2])
-meanR = np.mean(colorArrR)
-meanG = np.mean(colorArrG)
-meanB = np.mean(colorArrB)
-colorSumR = 0
-colorSumG = 0
-colorSumB = 0
-for i in range(0, len(colorArrR)):
-	colorSumR += np.power(colorArrR[i] - meanR, 2)
-	colorSumG += np.power(colorArrG[i] - meanG, 2)
-	colorSumB += np.power(colorArrB[i] - meanB, 2)
-sigmaR = np.sqrt(colorSumR/len(colorArrR))
-sigmaB = np.sqrt(colorSumB/len(colorArrB))
-sigmaG = np.sqrt(colorSumG/len(colorArrG))
+stddevs, tempImg = color.getColorDeviation(img, out)
 
-print(sigmaR, sigmaG, sigmaB)
+print(stddevs)
 
 cv.namedWindow('Image', cv.WINDOW_NORMAL)
 cv.imshow('Image', tempImg) # Show result

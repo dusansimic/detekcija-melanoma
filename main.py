@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import cv2 as cv
-import numpy as np
+import util as util
 import preprocessing as prep
 import border as border
 import diameter as diameter
@@ -58,7 +58,7 @@ print((sCnt*2)/cv.contourArea(util.findLargestContour(contourBlankImage)))
 # If diameter of lesion is bigger than 6mm
 # =============
 diameter = diameter.getMinEnclosingCircleRadius(util.findLargestContour(contours)) * 2
-print(diameter * proportions)
+print(diameter / proportions)
 
 # =============
 # C Rule

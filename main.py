@@ -23,7 +23,8 @@ import sys
 # 	print('You need to enter an image path')
 # 	exit()
 
-def analyze(imagePath):
+def analyze(paramArr):
+	imagePath, fileName = paramArr
 	proportions = 0
 	img = cv.imread(imagePath) # Reading image
 	imggray = cv.cvtColor(img, cv.COLOR_BGR2GRAY) # Converting to BW
@@ -86,7 +87,7 @@ def analyze(imagePath):
 	# cv.waitKey()
 	# cv.destroyAllWindows()
 
-	csvLine = str(asymmetryDeviation) + ',' + str(borderDeviation) + ',' + str(hstddevs) + ',' + str(sstddevs) + ',' + str(vstddevs) + ',' + str(realDiameter) + '\n'
+	csvLine = str(fileName) + ',' + str(asymmetryDeviation) + ',' + str(borderDeviation) + ',' + str(hstddevs) + ',' + str(sstddevs) + ',' + str(vstddevs) + ',' + str(realDiameter) + '\n'
 	file = open('results.csv', 'a')
 	file.write(csvLine)
 	file.close()

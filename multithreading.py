@@ -4,11 +4,13 @@ from main import analyze
 from os import listdir
 from os.path import isfile, join
 
-filesList = [f for f in listdir('/home/dusan/Downloads/slike/') if isfile(join('/home/dusan/Downloads/slike/', f))]
+imagesPath = '../slike/'
+
+filesList = [f for f in listdir(imagesPath) if isfile(join(imagesPath, f))]
 finalFilesList = []
 for file in filesList:
 	if file.endswith('.jpg'):
-		finalFilesList.append(join('/home/dusan/Downloads/slike/', file))
+		finalFilesList.append([join(imagesPath, file), file])
 
 with Pool(8) as p:
 	p.map(analyze, finalFilesList)

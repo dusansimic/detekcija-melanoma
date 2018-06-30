@@ -12,11 +12,5 @@ for file in filesList:
 	if file.endswith('.jpg'):
 		finalFilesList.append([join(imagesPath, file), file])
 
-with Pool(8) as p:
+with Pool(4) as p:
 	p.map(analyze, finalFilesList)
-
-# print(filesList)
-
-# if __name__ == '__main__':
-# 	with Pool(processes = 4) as pool:
-

@@ -3,14 +3,26 @@ from multiprocessing import Pool
 from main import analyze
 from os import listdir
 from os.path import isfile, join
+import sys
 
-imagesPath = '../slike/'
+imagesPath = ''
+noProcesses = 0
 
-filesList = [f for f in listdir(imagesPath) if isfile(join(imagesPath, f))]
-finalFilesList = []
-for file in filesList:
-	if file.endswith('.jpg'):
-		finalFilesList.append([join(imagesPath, file), file])
+for i in range(len(sys.argv)):
+	if sys.argv[i] == '--images-path':
+		i += 1
+		imagesPath = sys.argv[i]
+	elif sys.argv[i] == '--processes':
+		i += 1
+		noProcesses = int(sys.argv[i])
+if imagesPath == '':
+	print('Error: no images path specified')
+	exit()
+if noProcesses == 0:
+	print('Error: number of processes not specified')
+	exit()
 
-with Pool(4) as p:
-	p.map(analyze, finalFilesList)
+filesList = [[join(imagesPath, f), f] for f in listdir(imagesPath) if (isfile(join(imagesPath, f)) and f.endswith('.jpg'))]
+
+with Pool(noProcesses) as p:
+	p.map(analyze, filesList)

@@ -23,5 +23,6 @@ def getColorDeviation(img, out):
 		(tempImg[:,:,2] != 0)]
 
 	stddevs = np.std(tempImgArr, axis=0)
+	means = np.mean(tempImgArr, axis=0)
 
-	return (stddevs, tempImg)
+	return (stddevs, means, tempImg)

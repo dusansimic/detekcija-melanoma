@@ -71,8 +71,9 @@ def analyze(paramArr):
 	# Color detecion
 	# =============
 	# Prepare melanoma contour
-	stddevs, tempImg = color.getColorDeviation(img, out)
+	stddevs, means, tempImg = color.getColorDeviation(img, out)
 	hstddevs, sstddevs, vstddevs = stddevs
+	hmeans, smeans, vmeans = means
 
 	# =============
 	# A Rule
@@ -87,7 +88,7 @@ def analyze(paramArr):
 	# cv.waitKey()
 	# cv.destroyAllWindows()
 
-	csvLine = str(fileName) + ',' + str(asymmetryDeviation) + ',' + str(borderDeviation) + ',' + str(hstddevs) + ',' + str(sstddevs) + ',' + str(vstddevs) + ',' + str(realDiameter) + '\n'
+	csvLine = str(fileName) + ',' + str(asymmetryDeviation) + ',' + str(borderDeviation) + ',' + str(hstddevs) + ',' + str(hmeans) + ',' + str(sstddevs) + ',' + str(smeans) + ',' + str(vstddevs) + ',' + str(vmeans) + ',' + str(realDiameter) + '\n'
 	file = open('results.csv', 'a')
 	file.write(csvLine)
 	file.close()

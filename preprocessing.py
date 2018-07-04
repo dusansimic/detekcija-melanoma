@@ -1,10 +1,15 @@
 import cv2 as cv
 import numpy as np
 
-def removeHoles(contours, thresh):
-	for cnt in contours:
-		cv.drawContours(thresh, [cnt], 0, 255, -1)
-	return (contours, thresh)
+def removeHoles(thresh):
+	kernel = np.ones((1,1), np.uint8)
+	closing = cv.morphologyEx(thresh, cv.MORPH_CLOSE, kernel)
+	return closing
+
+def removeNoise(thresh):
+	kernel = np.ones((1,1), np.uint8)
+	opening = cv.morphologyEx(thresh, cv.MORPH_OPEN, kernel)
+	return opening
 
 def colorInBlack(contours, thresh):
 	for cnt in contours:

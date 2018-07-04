@@ -6,7 +6,8 @@ import util as util
 def getColorDeviation(img, out):
 	img = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 	imgFinal, contourFinal, _ = cv.findContours(out, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-	contourFinal, imgFinal = prep.removeHoles(contourFinal, imgFinal)
+	imgFinal = prep.removeHoles(imgFinal)
+	_, contourFinal, _ = cv.findContours(imgFinal, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 	largestFinalContour = util.findLargestContour(contourFinal)
 	maskHeight, maskWidth = out.shape
 	mask = np.zeros((maskHeight, maskWidth, 3), np.uint8)

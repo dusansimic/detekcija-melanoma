@@ -55,11 +55,11 @@ def getMelanomaWithoutCircle(out, contours):
 	cv.circle(blankImage, (x, y), int(radius), (255, 255, 255), 2)
 	blankImageBW = cv.cvtColor(blankImage, cv.COLOR_BGR2GRAY)
 	imgBlankImage, contourBlankImage, _ = cv.findContours(blankImageBW, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-	contourBlankImage, imgBlankImage = prep.removeHoles(contourBlankImage, imgBlankImage)
+	imgBlankImage = prep.removeHoles(imgBlankImage)
 
 	# Prepare melanoma contour
 	imgFinal, contourFinal, _ = cv.findContours(out, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-	contourFinal, imgFinal = prep.removeHoles(contourFinal, imgFinal)
+	imgFinal = prep.removeHoles(imgFinal)
 	largestFinalContour = util.findLargestContour(contourFinal)
 
 	# Insert circle into melanoma
@@ -68,7 +68,7 @@ def getMelanomaWithoutCircle(out, contours):
 	finalBlankImage = cv.cvtColor(finalBlankImage, cv.COLOR_BGR2GRAY)
 	finalBlankImage = cv.drawContours(finalBlankImage, [largestFinalContour], 0, 255) # Draw melanoma contour
 	finalBlankImage, finalBlankContour, _ = cv.findContours(finalBlankImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) # Find contour
-	finalBlankContour, finalBlankImage = prep.removeHoles(finalBlankContour, finalBlankImage) # Fill contour
+	finalBlankImage = prep.removeHoles(finalBlankImage) # Fill contour
 	cv.fillPoly(finalBlankImage, pts = [util.findLargestContour(contourBlankImage)], color = (0, 0, 0)) # Fill with circle
 
 	return (finalBlankImage, contourBlankImage)

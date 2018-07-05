@@ -50,12 +50,14 @@ def getMelanomaWithoutCircle(out, contours):
 
 	# Create a circle contour
 	contourNew = util.findLargestContour(contours)
-	x, y, radius = getEquivalentCircle(contourNew)
+	# x, y, radius = getEquivalentCircle(contourNew)
+	ellipse = getFittedEllipse(contourNew)
 	# cv.circle(img, (x, y), int(radius), (0, 255, 0), 2)
-	cv.circle(blankImage, (x, y), int(radius), (255, 255, 255), 2)
+	# cv.circle(blankImage, (x, y), int(radius), (255, 255, 255), 2)
+	cv.ellipse(blankImage, ellipse, (255, 255, 255), 2)
 	blankImageBW = cv.cvtColor(blankImage, cv.COLOR_BGR2GRAY)
 	imgBlankImage, contourBlankImage, _ = cv.findContours(blankImageBW, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-	imgBlankImage = prep.removeHoles(imgBlankImage)
+	_, imgBlankImage = prep.fillEmpty(contourBlankImage, imgBlankImage)
 
 	# Prepare melanoma contour
 	imgFinal, contourFinal, _ = cv.findContours(out, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)

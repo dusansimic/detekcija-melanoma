@@ -6,6 +6,11 @@ def removeHoles(thresh):
 	closing = cv.morphologyEx(thresh, cv.MORPH_CLOSE, kernel)
 	return closing
 
+def fillEmpty(contours, thresh):
+	for cnt in contours:
+		cv.drawContours(thresh, [cnt], 0, 255, -1)
+	return (contours, thresh)
+
 def removeNoise(thresh):
 	kernel = np.ones((1,1), np.uint8)
 	opening = cv.morphologyEx(thresh, cv.MORPH_OPEN, kernel)
